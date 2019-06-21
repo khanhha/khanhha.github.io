@@ -2,7 +2,7 @@
 title:  Fundamental Photogrammetry Algorithms
 excerpt: Fundamental Photogrammetry Algorithms
 header:
-  image: /assets/images/photogrammetry/demo.jpg
+  teaser: /assets/images/photogrammetry/demo.jpg
 ---
 
 # Photogrammetry

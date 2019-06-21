@@ -2,7 +2,7 @@
 title: "Deep Learning-Based Human Reconstruction"
 excerpt: "A full pipeline that reconstructs a 3D human model based on deep learning"
 header:
-  image: /assets/images/human/cnn_front_img_to_mesh.jpg
+  teaser: /assets/images/human/cnn_front_img_to_mesh.jpg
 ---
 
 This is a commercial project that I worked for a company in the field of virtual shopping. Due to the "agreement of disclosure", the code is not published and I can only explain briefly about the general idea of the project.

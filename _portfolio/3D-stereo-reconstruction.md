@@ -5,7 +5,7 @@ categories:
     - photogrammetry
     - stereo_reconstruction
 header:
-  image: /assets/images/photogrammetry/stereo_rig.png
+  teaser: /assets/images/photogrammetry/stereo_rig.png
 ---
 
 - This is a project I worked collaboratively with other members of the computer vision at The University of Bauhaus. We tried to build a stereo rig from scratch using Baumer camera and reconstruct 3D point cloud in the real-time. Due to the real-time constraint of the project, every stages of the pipeline must be implemented in OpenCL.
