@@ -2,7 +2,7 @@
 title: Crack Segmentation
 excerpt: deep learning models to detect/segment crack for a bridge investigation project
 header:
-  teaser: /assets/images/crack/crack_segmentation.png
+  teaser: /assets/images/crack/demo.png
 ---
 
 This is a project I worked in cooperation with the computer vision lab at The University of Bauhaus. Due to the lack of training data, I firstly approached the crack detection problem as a classification problem based on patch. Specifically, crack images are subdivided into patches, which are label as having crack pixels or not. These positive/negative image patches are used to train models like VGG16, Resnet, etc. However, even that the trained could reach very high accuracy on the test set, it performs poorly in real-world condition. The reason is that by dividing the images into patches in an effort to increase training dataset, we lose the contextual information of each crack. This make the model sensitive to noise.

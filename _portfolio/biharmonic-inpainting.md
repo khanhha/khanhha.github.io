@@ -2,7 +2,7 @@
 title: Image Inpainting
 excerpt: An implementation of an bihamonic-inpainting algorithm that fill in artifact holes in RGB images.
 header:
-  teaser: assets/images/inpainting/biharmonic inpainting_22_1.png
+  teaser: assets/images/inpainting/demo.png
 ---
 
 Image inpainting is the process of filling gaps, holes and defects in an image (for the sake of notation, they will be mentioned as hole in the rest of the article) so that filled-in pixel values change smoothly from the boundary toward the hole center. Due to the nature of the problem, differential equation is often used to solve for pixel values inside the hole with the boundary conditions are pixel values around the hole contour.

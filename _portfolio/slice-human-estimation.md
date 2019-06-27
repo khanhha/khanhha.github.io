@@ -1,8 +1,8 @@
 ---
-title: Slice-Based Human Reconstruction
+title: Slice-Based Human Reconstruction Using ML
 excerpt: A full pipeline that reconstructs a 3D human model based on a combination of different machine learning techniques and geometry processing.
 header:
-  teaser: /assets/images/human/human_slice_measure.jpg
+  teaser: /assets/images/human0/demo_slice.png
 ---
 
 
