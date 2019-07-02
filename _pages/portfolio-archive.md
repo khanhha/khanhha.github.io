@@ -7,4 +7,4 @@ entries_layout: grid
 classes: wide
 ---
 
-A curated list of my project.
+A curated list of my projects.

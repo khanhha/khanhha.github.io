@@ -3,7 +3,7 @@ main:
     url: /portfolio/
   - title: "Posts"
     url: /posts/
-  - title: "Tags"
-    url: /tags/
-  - title: "About"
-    url: /about/
+  # - title: "Tags"
+  #   url: /tags/
+  - title: "Resume"
+    url: https://drive.google.com/open?id=15fYKMMM0ZJaDqNfuIcAMfgzXeRB9tlxS
