@@ -44,7 +44,7 @@ In the SMPL model, the human skeleton is described by a hierarchy of 24 joints c
 These 24 joints form the pose parameter of the model, which is vector of $(23\text{x}3)$ representing $23$ (except the origin joint) relative rotations of $23$ joints from their parent joints. Each rotation is encoded by a axis-angle rotation representation of $3$ scalar values, which is denoted by the $\boldsymbol{\theta}$ vector in the below figure.
 ![](/assets/images/smpl/axis_angle_rot.png)
 
-The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of 23 values, the final deformation will be calculated as a linear combination of these principal components.
+The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of relative rotation 23x3x3 values as weights, the final deformation will be calculated as a linear combination of these principal components.
 
 ```python
 # self.pose :   24x3    the pose parameter of the human subject
@@ -62,4 +62,44 @@ lrotmin = (self.R[1:] - I_cube).ravel()
 
 # v_posed   :   6890x3  the blended deformation calculated from the
 v_posed = v_shaped + self.posedirs.dot(lrotmin)
+```
+
+# Skinning
+when the joints transforms, the neighboring vertices are also transformed with the same transformations. The further a vertex from a joint, the less it is affected by the joint transformation. Specifically, a final vertex is calculated as a weighted average of 24 transformed versions, corresponding to 24 joints.
+![](/assets/images/smpl/skinning.png)
+The below code first calculates the global transformation for each joint by recursively concatenating its local matrix with its parent matrix. These global transformations are then subtracted from the corresponding transformations of the joints in the rest pose. For each vertex, its final transformation is calculated by blending the 24 global transformations with different weights. The code for these steps are shown in the below.
+
+```python
+# world transformation of each joint
+G = np.empty((self.kintree_table.shape[1], 4, 4))
+# the root transformation: rotation | the root joint location
+G[0] = self.with_zeros(np.hstack((self.R[0], self.J[0, :].reshape([3, 1]))))
+# recursively chain transformations
+for i in range(1, self.kintree_table.shape[1]):
+  G[i] = G[self.parent[i]].dot(
+    self.with_zeros(
+      np.hstack(
+        [self.R[i],((self.J[i, :]-self.J[self.parent[i],:]).reshape([3,1]))]
+      )
+    )
+  )
+
+# remove the transformation due to the rest pose
+G = G - self.pack(
+  np.matmul(
+    G,
+    np.hstack([self.J, np.zeros([24, 1])]).reshape([24, 4, 1])
+    )
+  )
+# G       : (24, 4, 4)  : the global joint transformations with rest transformations removed
+# weights : (6890, 24)  : the transformation weights for each joint
+# T       : (6890, 4, 4): the final transformation for each joint
+T = np.tensordot(self.weights, G, axes=[[1], [0]])
+
+# apply transformation to each vertex
+rest_shape_h = np.hstack((v_posed, np.ones([v_posed.shape[0], 1])))
+v = np.matmul(T, rest_shape_h.reshape([-1, 4, 1])).reshape([-1, 4])[:, :3]
+
+# add with one global translation
+verts = v + self.trans.reshape([1, 3])
 ```
