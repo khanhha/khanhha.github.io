@@ -7,6 +7,21 @@ tags:
   - human_estimation
 ---
 
+# Introduction
+This article could be served as a bridge between the theoretical explanation in SMPL paper and a sample numpy code that synthesizes a new human subject from a pre-trained model provided by the Maxplank Institute. I wrote it as an exercise to strengthen my knowledge about the implementation of the SMPL model.  
+
+3D objects are often represented by vertices and triangles that encodes their 3D shape. The more detail an object is, the more vertices it is required. However, for objects like human, the 3D mesh representation could be compressed down to a lower dimensional space whose axes are like their height, fatness, bust circumference, belly size, pose etc. This representation is often smaller and more meaningful.
+
+The SMPL is a statistical model that encodes the human subjects with two types of parameters:
+- Shape parameter: a shape vector of 10 scalar values, each of which could be interpreted as an amount of expansion/shrink of a human subject along some direction such as taller or shorter.
+
+- Pose parameter: a pose vector of 24x3 scalar values that keeps the relative rotations of joints with respective to their parameters. Each rotation is encoded as a arbitrary 3D vector in axis-angle rotation representation.
+
+As an example, the below code samples a random human subject with shape and pose parameters. The shift and multiplication are applied to bring the random values to the normal range of the SMPL model; otherwise, the synthesized mesh will look like an alien. 
+```python
+pose = (np.random.rand((24, 3)) - 0.5)
+beta = (np.random.rand((10,)) - 0.5) * 2.5
+```
 # Shape synthesis
 
 The rest pose shape is formed by a linear combination of principal shape components, which are vertex deviations from the mean shape of the data-set. Specifically, each principal component is a vector of $6890\text{x}3$, which represent $(x,y,z)$ displacements from the corresponding vertices of the mean mesh. To make it clear, below is a visualization of the first and second principal components of the SMPL model, which denotes the largest changes among the meshes in the data-set. The mesh pair for each component is computed as follows:
