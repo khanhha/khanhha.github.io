@@ -79,8 +79,7 @@ From the visualization, it seems that the first component explains for the chang
 
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/pca_1_2.png" width="500" height="300" style="padding-bottom:0.5em;" />
-
-the image is taken from the Maxplank Institute
+<p>the image is taken from the Maxplank Institute</p>
 </div>
 
 
@@ -106,11 +105,8 @@ The 24-joints hierarchy is represented by  $(23\text{x}3)$ matrix corresponding 
 
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/axis_angle_rot.png" width="150" height="250" style="padding-bottom:0.5em;" />
-
-
-The image is taken from the Wikipedia
+<p>The image is taken from the Wikipedia</p>
 </div>
-
 
 The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of relative rotation 23x3x3 values as weights, the final deformation will be calculated as a linear combination of these principal components.
 
