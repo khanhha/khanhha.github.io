@@ -194,4 +194,4 @@ verts = v + self.trans.reshape([1, 3])
 ```
 
 # Conclusion
-In this port, we go through the steps of synthesizing a new human subject from the trained SMPL model provided by the Maxplank institute. For further information, please check [the SMPL paper](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
+In this port, we went through the steps of synthesizing a new human subject from the trained SMPL model provided by the Maxplank institute. We learned how to combine principal shape components to reconstruct the rest-pose shape and then regress the joint locations from it. We also learned to predict the deformation correction caused by pose and apply global joint transformation to the rest-pose mesh. For further information, please check [the SMPL paper](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
