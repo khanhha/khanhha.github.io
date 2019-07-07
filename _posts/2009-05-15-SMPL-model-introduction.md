@@ -74,12 +74,14 @@ $$ M_i = T \pm 3{\sigma}*PC_k$$
 
 From the visualization, it seems that the first component explains for the change in height and the second represents the change in weight among human meshes.
 
-<div style="width:image width px; font-size:80%; text-align:center;">
-<img src="/assets/images/smpl/pca_1_2.png" style="padding-bottom:0.5em;"/>
 
-
-The image is taken from the the Maxplank Institute
 </div>
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/pca_1_2.png" width="500" height="300" style="padding-bottom:0.5em;" />
+
+the image is taken from the Maxplank Institute
+</div>
+
 
 The below code creates a new mesh by linearly combining 10 principal components from the SMPL model. The more principal components we use, the less the reconstruction error is; however, the SMPL model from the Maxplank Institute just provides us with the first 10 components.
 ```python
@@ -101,11 +103,13 @@ The image is taken from the SMPL paper
 
 The 24-joints hierarchy is represented by  $(23\text{x}3)$ matrix corresponding to $23$ relative rotations from parent joints. Each rotation is encoded by a axis-angle rotation representation of $3$ scalar values, which is denoted by the $\boldsymbol{\theta}$ vector in the below figure.
 
+</div>
 <div style="width:image width px; font-size:80%; text-align:center;">
-<img src="/assets/images/smpl/axis_angle_rot.png" style="padding-bottom:0.5em;"/>
+<img src="/assets/images/smpl/axis_angle_rot.png" width="150" height="250" style="padding-bottom:0.5em;" />
 
 The image is taken from the Wikipedia
 </div>
+
 
 The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of relative rotation 23x3x3 values as weights, the final deformation will be calculated as a linear combination of these principal components.
 
