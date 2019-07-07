@@ -7,6 +7,20 @@ tags:
   - human_estimation
 ---
 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+
+- [ Introduction](#introduction)
+- [ Human synthesis pipeline](#human-synthesis-pipeline)
+- [ Shape Blend Shapes](#shape-blend-shapes)
+- [ Pose Blend Shapes](#pose-blend-shapes)
+- [ Skinning](#skinning)
+  - [ Joint Locations Estimation](#joint-locations-estimation)
+  - [ Skinning deformation](#skinning-deformation)
+- [ Conclusion](#conclusion)
+
+<!-- /code_chunk_output -->
+
 # Introduction
 This article could be served as a bridge between the theoretical explanation in SMPL paper and a sample numpy code that synthesizes a new human subject from a pre-trained model provided by the Maxplank Institute. I wrote it as an exercise to strengthen my knowledge about the implementation of the SMPL model.  
 
@@ -53,7 +67,7 @@ The image is taken from the SMPL paper
 
 The image is taken from the SMPL paper
 </div>
-# __Shape Blend Shapes__
+# Shape Blend Shapes
 
 The rest pose shape is formed by adding the mean shape with a linear combination of principal shape components (or vertex deviations), which denote the principal changes among all the meshes in the dataset. Specifically, each principal component is a  $6890\text{x}3$ matrix, which represent $(x,y,z)$ vertex displacements from the corresponding vertices of the mean mesh. To make it more clear, below is a visualization of the first and second principal components of the SMPL model. The mesh pair for each component is constructed adding/subtract the component to/from the mean mesh an amount of 3 standard deviations ,as showned in the below equation:
 $$ M_i = T \pm 3{\sigma}*PC_k$$
@@ -62,6 +76,7 @@ From the visualization, it seems that the first component explains for the chang
 
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/pca_1_2.png" style="padding-bottom:0.5em;"/>
+
 
 The image is taken from the the Maxplank Institute
 </div>
