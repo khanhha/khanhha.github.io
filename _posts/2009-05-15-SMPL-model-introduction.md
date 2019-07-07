@@ -77,7 +77,6 @@ $$ M_i = T \pm 3{\sigma}*PC_k$$
 From the visualization, it seems that the first component explains for the change in height and the second represents the change in weight among human meshes.
 
 
-</div>
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/pca_1_2.png" width="500" height="300" style="padding-bottom:0.5em;" />
 
@@ -105,9 +104,9 @@ The image is taken from the SMPL paper
 
 The 24-joints hierarchy is represented by  $(23\text{x}3)$ matrix corresponding to $23$ relative rotations from parent joints. Each rotation is encoded by a axis-angle rotation representation of $3$ scalar values, which is denoted by the $\boldsymbol{\theta}$ vector in the below figure.
 
-</div>
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/axis_angle_rot.png" width="150" height="250" style="padding-bottom:0.5em;" />
+
 
 The image is taken from the Wikipedia
 </div>
