@@ -7,6 +7,9 @@ tags:
   - human_estimation
 ---
 
+This article could be served as a bridge between [the SMPL paper](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf) and [a numpy-based code](https://github.com/YeeCY/SMPLpp) that synthesizes a new human mesh instance from [a pre-trained SMPL model](http://smpl.is.tue.mpg.de/) provided by the Maxplank Institute. I wrote it as an exercise to strengthen my knowledge about the implementation of the SMPL model.  
+
+
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
@@ -22,7 +25,6 @@ tags:
 <!-- /code_chunk_output -->
 
 # Introduction
-This article could be served as a bridge between the theoretical explanation in SMPL paper and a sample numpy code that synthesizes a new human subject from a pre-trained model provided by the Maxplank Institute. I wrote it as an exercise to strengthen my knowledge about the implementation of the SMPL model.  
 
 3D objects are often represented by vertices and triangles that encodes their 3D shape. The more detail an object is, the more vertices it is required. However, for objects like human, the 3D mesh representation could be compressed down to a lower dimensional space whose axes are like their height, fatness, bust circumference, belly size, pose etc. This representation is often smaller and more meaningful.
 
