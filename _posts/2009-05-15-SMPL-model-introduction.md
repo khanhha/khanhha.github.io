@@ -143,8 +143,7 @@ Thanks to the fixed mesh topology of the SMPL model, each joint location could b
 
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/joint.png" style="padding-bottom:0.5em;"/>
-
-The image is taken from the SMPL paper
+<p>The image is taken from the SMPL paper</p>
 </div>
 
 The below code shows how to regress joint locations from the rest-pose mesh.
