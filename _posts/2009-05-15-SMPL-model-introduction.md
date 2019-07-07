@@ -17,21 +17,56 @@ The SMPL is a statistical model that encodes the human subjects with two types o
 
 - Pose parameter: a pose vector of 24x3 scalar values that keeps the relative rotations of joints with respective to their parameters. Each rotation is encoded as a arbitrary 3D vector in axis-angle rotation representation.
 
-As an example, the below code samples a random human subject with shape and pose parameters. The shift and multiplication are applied to bring the random values to the normal range of the SMPL model; otherwise, the synthesized mesh will look like an alien. 
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/shape_pose.png" style="padding-bottom:0.5em;"/>
+the image is taken from the SMPL paper
+</div>
+
+
+As an example, the below code samples a random human subject with shape and pose parameters. The shift and multiplication are applied to bring the random values to the normal parameter range of the SMPL model; otherwise, the synthesized mesh will look like an alien.
 ```python
 pose = (np.random.rand((24, 3)) - 0.5)
 beta = (np.random.rand((10,)) - 0.5) * 2.5
 ```
-# Shape synthesis
+# Human synthesis pipeline
+The process of synthesizing a new human instance from the SMPL model consists of 3 stages as illustrated in the below figure.
+- __Shape Blend Shapes__: In this step, a template(or mean) mesh  $\bar{T}$ is added with vertex displacements that represent how far the subject shape is from the mean shape.
 
-The rest pose shape is formed by a linear combination of principal shape components, which are vertex deviations from the mean shape of the data-set. Specifically, each principal component is a vector of $6890\text{x}3$, which represent $(x,y,z)$ displacements from the corresponding vertices of the mean mesh. To make it clear, below is a visualization of the first and second principal components of the SMPL model, which denotes the largest changes among the meshes in the data-set. The mesh pair for each component is computed as follows:
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/stage_1.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+
+- __Pose Blend Shapes__:  After the identity mesh is constructed in the rest pose, it is further added with vertex displacements that explain for deformation correction caused by a specific pose. In other words, the pose in the next step "Skinning" results in some amount of deformation on the rest pose at this step.
+
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/stage_2.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+
+- __Skinning__: Each mesh vertex from the previous step is transformed by a weighted-combination of joint deformation. To put it simply, the closer to a vertex a joint is, the stronger the joint rotates/transforms the vertex.
+
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/stage_3.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+# __Shape Blend Shapes__
+
+The rest pose shape is formed by adding the mean shape with a linear combination of principal shape components (or vertex deviations), which denote the principal changes among all the meshes in the dataset. Specifically, each principal component is a  $6890\text{x}3$ matrix, which represent $(x,y,z)$ vertex displacements from the corresponding vertices of the mean mesh. To make it more clear, below is a visualization of the first and second principal components of the SMPL model. The mesh pair for each component is constructed adding/subtract the component to/from the mean mesh an amount of 3 standard deviations ,as showned in the below equation:
 $$ M_i = T \pm 3{\sigma}*PC_k$$
 
-Intuitively, it seems that the first component explains for the change in height and the second represents the change in weight among human meshes.
+From the visualization, it seems that the first component explains for the change in height and the second represents the change in weight among human meshes.
 
-![](/assets/images/smpl/pca_1_2.png)
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/pca_1_2.png" style="padding-bottom:0.5em;"/>
 
-After the model is trained, a new shape could be created by linearly combining 10 principal components from the SMPL model, as shown in the below code.
+The image is taken from the SMPL paper
+</div>
+
+The below code creates a new mesh by linearly combining 10 principal components from the SMPL model. The more principal components we use, the less the reconstruction error is; however, the SMPL model from the Maxplank Institute just provides us with the first 10 components.
 ```python
 # shapedirs:  6890x3x10:  10 principal deviations
 # beta:       10x1:       the shape vector of a particular human subject
@@ -40,24 +75,22 @@ After the model is trained, a new shape could be created by linearly combining 1
 v_shaped = self.shapedirs.dot(self.beta) + self.v_template
 ```
 
-# Joint locations
-In this step, 24 skeleton joint locations are estimated from the mesh calculated in the previous step. The idea is to build a set of sparse neighbor vertices for each joint, and then the joint location for another mesh could be calculated  as the weighted average of the neighbor vertex set. This average is represented by a joint regression matrix learned from the data-set that defines a sparse set of weight for each joint.
-
-![](/assets/images/smpl/joint.png)
-
-```
-# v_shape:          6890x3    the mesh in neutral T-pose calculated from a shape parameter of 10 scalar values.
-# self.J_regressor: 24x6890   the regression matrix that maps 6890 vertex to 24 joint locations
-# self.J:           24x3      24 joint (x,y,z) locations
-self.J = self.J_regressor.dot(v_shaped)
-```
-
 # Pose Blend Shapes
-In the SMPL model, the human skeleton is described by a hierarchy of 24 joints corresponding to the white dots in the below figure. This hierarchy is defined by a kinematic tree that keeps the parent relation for each joint.
-![](/assets/images/smpl/joint_locations.png)
+In the SMPL model, the human skeleton is described by a hierarchy of 24 joints as shown by the white dots in the below figure. This hierarchy is defined by a kinematic tree that keeps the parent relation for each joint.
 
-These 24 joints form the pose parameter of the model, which is vector of $(23\text{x}3)$ representing $23$ (except the origin joint) relative rotations of $23$ joints from their parent joints. Each rotation is encoded by a axis-angle rotation representation of $3$ scalar values, which is denoted by the $\boldsymbol{\theta}$ vector in the below figure.
-![](/assets/images/smpl/axis_angle_rot.png)
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/joint_locations.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+
+The 24-joints hierarchy is represented by  $(23\text{x}3)$ matrix corresponding to $23$ relative rotations from parent joints. Each rotation is encoded by a axis-angle rotation representation of $3$ scalar values, which is denoted by the $\boldsymbol{\theta}$ vector in the below figure.
+
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/axis_angle_rot.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
 
 The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of relative rotation 23x3x3 values as weights, the final deformation will be calculated as a linear combination of these principal components.
 
@@ -80,8 +113,34 @@ v_posed = v_shaped + self.posedirs.dot(lrotmin)
 ```
 
 # Skinning
-when the joints transforms, the neighboring vertices are also transformed with the same transformations. The further a vertex from a joint, the less it is affected by the joint transformation. Specifically, a final vertex is calculated as a weighted average of 24 transformed versions, corresponding to 24 joints.
-![](/assets/images/smpl/skinning.png)
+
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/skinning.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+
+In this step, vertex in the rest pose are transformed by a weighted combination of global joint transformations (rotation + translation). The joint rotations are already calculated from the pose parameter of the human subject, but the joint translation part needs to be estimated from the corresponding rest-pose mesh of the subject.
+
+## Joint Locations Estimation
+Thanks to the fixed mesh topology of the SMPL model, each joint location could be estimated as an average of surrounding vertices. This average is represented by a joint regression matrix learned from the data-set that defines a sparse set of vertex weight for each joint. As shown in the below figure, the knee joint will be calculated as a linear combination of red vertices, each with a different weight.
+
+<div style="width:image width px; font-size:80%; text-align:center;">
+<img src="/assets/images/smpl/joint.png" style="padding-bottom:0.5em;"/>
+
+The image is taken from the SMPL paper
+</div>
+
+The below code shows how to regress joint locations from the rest-pose mesh.
+```
+# v_shape:          6890x3    the mesh in neutral T-pose calculated from a shape parameter of 10 scalar values.
+# self.J_regressor: 24x6890   the regression matrix that maps 6890 vertex to 24 joint locations
+# self.J:           24x3      24 joint (x,y,z) locations
+self.J = self.J_regressor.dot(v_shaped)
+```
+## Skinning deformation
+The joint transformations cause the neighboring vertices transform with the same transformations but with different influence. The further from a joint a vertex is, the less it is affected by the joint transformation. Therefore, a final vertex could be calculated as a weighted average of its versions transformed by 24 joints.
+
 The below code first calculates the global transformation for each joint by recursively concatenating its local matrix with its parent matrix. These global transformations are then subtracted from the corresponding transformations of the joints in the rest pose. For each vertex, its final transformation is calculated by blending the 24 global transformations with different weights. The code for these steps are shown in the below.
 
 ```python
@@ -118,3 +177,6 @@ v = np.matmul(T, rest_shape_h.reshape([-1, 4, 1])).reshape([-1, 4])[:, :3]
 # add with one global translation
 verts = v + self.trans.reshape([1, 3])
 ```
+
+# Conclusion
+In this port, we go through the steps of synthesizing a new human subject from the trained SMPL model provided by the Maxplank institute. For further information, please check [the SMPL paper](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
