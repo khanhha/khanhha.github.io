@@ -63,7 +63,7 @@ From the visualization, it seems that the first component explains for the chang
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/pca_1_2.png" style="padding-bottom:0.5em;"/>
 
-The image is taken from the SMPL paper
+The image is taken from the the Maxplank Institute
 </div>
 
 The below code creates a new mesh by linearly combining 10 principal components from the SMPL model. The more principal components we use, the less the reconstruction error is; however, the SMPL model from the Maxplank Institute just provides us with the first 10 components.
@@ -89,7 +89,7 @@ The 24-joints hierarchy is represented by  $(23\text{x}3)$ matrix corresponding 
 <div style="width:image width px; font-size:80%; text-align:center;">
 <img src="/assets/images/smpl/axis_angle_rot.png" style="padding-bottom:0.5em;"/>
 
-The image is taken from the SMPL paper
+The image is taken from the Wikipedia
 </div>
 
 The relative rotations of 23 joints $(23\text{x}3)$ causes deformation to surrounding vertices. These deformations are captured by a matrix of (23x6890x3) which represents $23$ principal components of vertex displacements of $(6890x3)$. Therefore, given a new pose vector of relative rotation 23x3x3 values as weights, the final deformation will be calculated as a linear combination of these principal components.
