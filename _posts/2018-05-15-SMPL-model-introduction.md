@@ -1,5 +1,5 @@
 ---
-title: "SMPL human model introduction"
+title: "SMPL Human Model Introduction"
 date: 2019-04-18T15:34:30-04:00
 categories:
   - posts
@@ -13,14 +13,14 @@ This article could be served as a bridge between [the SMPL paper](http://files.i
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-- [ Introduction](#introduction)
-- [ Human synthesis pipeline](#human-synthesis-pipeline)
-- [ Shape Blend Shapes](#shape-blend-shapes)
-- [ Pose Blend Shapes](#pose-blend-shapes)
-- [ Skinning](#skinning)
-  - [ Joint Locations Estimation](#joint-locations-estimation)
-  - [ Skinning deformation](#skinning-deformation)
-- [ Conclusion](#conclusion)
+- [Introduction](#introduction)
+- [Human synthesis pipeline](#human-synthesis-pipeline)
+- [Shape Blend Shapes](#shape-blend-shapes)
+- [Pose Blend Shapes](#pose-blend-shapes)
+- [Skinning](#skinning)
+  - [Joint Locations Estimation](#joint-locations-estimation)
+  - [Skinning deformation](#skinning-deformation)
+- [Conclusion](#conclusion)
 
 <!-- /code_chunk_output -->
 

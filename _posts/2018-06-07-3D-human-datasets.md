@@ -1,3 +1,11 @@
+---
+title: "3D Human Dataset"
+categories:
+  - posts
+tags:
+  - human_estimation, human_dataset
+---
+
 In this note, I summerised different human data-sets that I collected so far for my research. For each dataset, you can find the link to the dataset homepage, the main data types provided by the dataset and its sizes. I hope that it would be helpful for you as well.
 
 # [Caesar dataset](http://store.sae.org/caesar/)
