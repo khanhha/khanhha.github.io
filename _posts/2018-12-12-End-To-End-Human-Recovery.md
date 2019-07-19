@@ -46,7 +46,13 @@ The implementation was written by MandyMo. You can check it out [here](https://g
 - [CMU pose dataset](http://mocap.cs.cmu.edu/): images, 2D keypoints, 3D keypoints
 
 # Overview
-![](/assets/images/e2ehm/overview.png)
+<div style="align: left; text-align:center;">
+    <img src="/assets/images/e2ehm/overview.png" width="700px" />
+    </b>
+    <div class="caption">image is taken from the paper</div>
+</div>
+<br/>
+
 The general pipeline of the end-to-end model is depicted in the above figure.
 
 As highlighted in the green rectangle, the generator module, which takes in
@@ -59,7 +65,14 @@ In the pink stage, the predicted 3D joint locations are projected to the image u
 Finally, in the blue stage, a discriminator is trained to encourage the generator to spit out reasonable values that explain for a real human shape and pose; otherwise, as stated in the paper, the generator will produce many visually displeasing result. To achieve it, the generator's weights will be trained, through the discriminator, to fool the discriminator to believe that the $\Theta$ vectors from the generator are from the dataset. At the same time, the discriminator is also fed with both fake values from generator and ground truth values from the dataset to better recognize which one comes from the dataset and which one does not. Over time, the discriminator will become more precise, which also pushes the generator to be more delicate to be able to fool the discriminator.
 
 # Generator
-![](/assets/images/e2ehm/generator.png)
+<div style="align: left; text-align:center;">
+    <img src="/assets/images/e2ehm/generator.png" width="700px" />
+    </b>
+    <div class="caption">image is taken from the paper</div>
+</div>
+<br/>
+
+
 The HMR paper represents a human subject as an 85-dimensional vector
 $\Theta = \{\theta, \beta, R, t, s \}$
 - $\theta$ and  $\beta$ are shape and pose parameters to the SMPL model. Given these two parameter vectors as input, the SMPL model will return a posed mesh of the human subject.  
@@ -203,7 +216,12 @@ def batch_pose_l2_loss(self, real_pose, fake_pose, w_pose):
 ```
 
 # Discriminator
-![](/assets/images/e2ehm/discriminator.png)
+<div style="align: left; text-align:center;">
+    <img src="/assets/images/e2ehm/discriminator.png" width="700px" />
+    </b>
+    <div class="caption">image is taken from the paper</div>
+</div>
+<br/>
 
 As explained in the section $3.3$ of the paper, the reprojection loss just ensures that the difference between reprojected keypoints and ground truth keypoints is minimized, even that the 3D configuration is irregular because one 2D configuration could be explained by multiple 3D configurations. It brings the need for a discriminator that is trained to encourage the Generator to churn out reasonable SMPL parameters.
 
