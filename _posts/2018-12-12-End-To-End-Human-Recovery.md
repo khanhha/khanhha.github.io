@@ -12,8 +12,6 @@ This is a note that I jotted down while reading the paper "End-to-end Recovery o
 The implementation was written by MandyMo. You can check it out [here](https://github.com/MandyMo/pytorch_HMR). I chose this version because it seems more understandable to me than the original Tensorflow version by the author.
 
 - [Datasets](#datasets)
-  - [2D datasets](#2d-datasets)
-  - [3D dataset](#3d-dataset)
 - [Overview](#overview)
 - [Generator](#generator)
 - [Generator Losses](#generator-losses)
