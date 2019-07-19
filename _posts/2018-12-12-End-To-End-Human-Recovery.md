@@ -123,6 +123,8 @@ As mentioned in section 3.2 of the paper, it is challenging to regress the $\The
 
 After $N$ iterations, we have a set of prediction values $(\Theta_0,..., \Theta_n)$, which will be used later to calculate loss values. The whole process is summarized in the method $forward$ of the $ThetaRegressor$. For more detail about the Iterative Error Feedback, please refer to [the paper](https://arxiv.org/pdf/1507.06550.pdf)
 
+<br/>
+<br/>
 # Generator Losses
 Now we will discuss different losses for optimizing the generator. There are 3 main types of loss: 2D keypoint loss, 3D keypoint loss, and SMPL parameters loss. The two later losses are just calculated over the two 3D datasets whose 3D ground truth data is available.
 
@@ -214,7 +216,8 @@ def batch_pose_l2_loss(self, real_pose, fake_pose, w_pose):
     dif_rs = ((real_rs - fake_rs) ** 2).view(-1, 207)
     return torch.matmul(dif_rs.sum(1), w_pose) * 1.0 / k
 ```
-
+<br/>
+<br/>
 # Discriminator
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/discriminator.png" width="700px" />
@@ -312,6 +315,8 @@ class Discriminator(nn.Module):
       full_pose_disc_value = self.full_pose_discriminator(pose_inter_disc_value.contiguous().view(batch_size, -1))
       return torch.cat((pose_disc_value, full_pose_disc_value, shape_disc_value), 1)
 ```
+<br/>
+<br/>
 # Discriminator Losses
 As described in the section 3.3 of the paper, there are two types of discriminator losses:  the adversarial loss function for the encoder and the loss for each discriminator.
 ## The adversarial loss function
