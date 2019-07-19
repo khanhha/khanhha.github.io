@@ -116,11 +116,13 @@ After $N$ iterations, we have a set of prediction values $(\Theta_0,..., \Theta_
 Now we will discuss different losses for optimizing the generator. There are 3 main types of loss: 2D keypoint loss, 3D keypoint loss, and SMPL parameters loss. The two later losses are just calculated over the two 3D datasets whose 3D ground truth data is available.
 
 ## 2D Keypoint Loss
- The 2D keypoint loss is calculated as L1 distance between the reprojected keypoints and the ground truth keypoints. Specifically, the regressor predicts SMPL parameters, which are  used to reconstruct the posed 3D mesh of the human subject. Thanks to the fixed topology of the mesh, 3D joint locations could be inferred using adjacent vertices. The estimated 3D joint locations are then projected to 2D keypoints using camera parameters $\{s, T, R\}$. The below implementation is a realization of the loss equation $(3)$ in the paper, as shown in below
- $$
- L_{reproj} = \sum_i||v_i(x_i - \hat{x_i})||_1
- $$
- where $x_i$ are 2D keypoints, $\hat{x_i}$ are reprojected 2D keypoints, $v_i\in(0,1)$  is the visibility of each keypoint
+The 2D keypoint loss is calculated as L1 distance between the reprojected keypoints and the ground truth keypoints. Specifically, the regressor predicts SMPL parameters, which are  used to reconstruct the posed 3D mesh of the human subject. Thanks to the fixed topology of the mesh, 3D joint locations could be inferred using adjacent vertices. The estimated 3D joint locations are then projected to 2D keypoints using camera parameters $\{s, T, R\}$. The below implementation is a realization of the loss equation $(3)$ in the paper, as shown in below
+
+$$
+L_{reproj} = \sum_i||v_i(x_i - \hat{x_i})||_1
+$$
+
+where $x_i$ are 2D keypoints, $\hat{x_i}$ are reprojected 2D keypoints, $v_i\in(0,1)$  is the visibility of each keypoint
 
 ```python
 """
@@ -144,6 +146,7 @@ The 3D keypoint loss is calculated as L2 distance between the predicted 3D keypo
 Note that the 3D keypoint loss is just calculated for data records where the 3D ground truth keypoints are available.
 
 The loss is described by the equation $(6)$ in the paper, as rewritten as below
+
 $$
 L_{joints} = ||(X_i - \hat{X_i})||_2^2
 $$
@@ -307,9 +310,11 @@ class Discriminator(nn.Module):
 As described in the section 3.3 of the paper, there are two types of discriminator losses:  the adversarial loss function for the encoder and the loss for each discriminator.
 ## The adversarial loss function
 The adversarial loss function as rewritten in the below, tries to optimize the encoder (generator) weights, through the discriminator, in a way that the generator will produce shape and pose parameters that could fool the discriminator to believe that they are true parameters. In other words, each probability $D_i$ is subjected from $1$ means that the generator should be trained in a way that its shape, pose output will make the discriminator $D_i$ return a probability as close to $1$ as possible.
+
 $$
 L_{adv}(E) = \sum_i\mathbb{E}_{\Theta\backsim{pe}}[(D_i(E(I)) - 1)^2]
 $$  
+
 The code for the loss function is shown in below. The input is 25 probability values, as explained in the previous paragraph.
 ```python
 '''
@@ -322,6 +327,7 @@ def batch_encoder_disc_l2_loss(self, disc_value):
 ```
 ## The objective loss for each discriminator
 The objective loss for each discriminator consists of two terms, as shown in the below equation. The first term means that given the ground truth $\Theta$ value, the discriminator should return a probability value close to $1$. In contrast, the second term tell discriminator that given the predicted $\Theta$ from the generator, its output probability should be as small as possible.
+
 $$
 L(D_i) = \mathbb{E}_{\Theta\backsim{p_{data}}}[(D_i(\Theta) - 1)^2] +         \mathbb{E}_{\Theta\backsim{p_{E}}}[D_i(E(I))^2]
 $$  
