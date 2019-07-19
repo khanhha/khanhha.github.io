@@ -34,7 +34,6 @@ The implementation was written by MandyMo. You can check it out [here](https://g
 # Overview
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/overview.png" width="700px" />
-    </b>
     <div class="caption">image is taken from the paper</div>
 </div>
 <br/>
@@ -56,7 +55,6 @@ Finally, in the blue stage, a discriminator is trained to encourage the generato
 # Generator
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/generator.png" width="700px" />
-    </b>
     <div class="caption">image is taken from the paper</div>
 </div>
 <br/>
@@ -173,7 +171,7 @@ def batch_kp_3d_l2_loss(self, real_3d_kp, fake_3d_kp, w_3d):
 
 ## SMPL shape and pose loss
 When the ground truth SMPL shape and pose parameters are available, the SMPL loss is calculated as the L2 distance between predicted parameters and ground truth parameters.
-</b>
+
 In contrast to the shape loss which is drawn directly on shape parameters, the pose loss is calculated based on the rotation matrix representation, which is converted from the corresponding angle-axis representation using [Rodrigues formula](https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula). This implementation is different from the equation in the paper as follows:
 
 $$
@@ -210,7 +208,6 @@ def batch_pose_l2_loss(self, real_pose, fake_pose, w_pose):
 # Discriminator
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/discriminator.png" width="700px" />
-    </b>
     <div class="caption">image is taken from the paper</div>
 </div>
 <br/>
@@ -330,7 +327,6 @@ L(D_i) = \mathbb{E}_{\Theta\backsim{p_{data}}}[(D_i(\Theta) - 1)^2] +         \m
 $$  
 
 One very important point we need to notice here is that optimizing this loss doesn't result in a change in weights of the generator. Here we just optimize the discriminator weights, which is in contrast to the previous loss, whose optimization would cause the change in weights of the generator.
-</b>
 The implementation of the loss is shown below.
 ```python
 '''
