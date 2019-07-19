@@ -40,14 +40,13 @@ The implementation was written by MandyMo. You can check it out [here](https://g
 
 The general pipeline of the end-to-end model is depicted in the above figure.
 
-As highlighted in the green rectangle, the generator module, which takes in
-an RGB image and spit out 85 scalar values of pose $\theta$, shape $\beta$ and camera parameters $\{s,R,T \}$ that describe the image of the human subject.
+As shown in the green stage, the generator module takes in an RGB image and spits out 85 scalar values of pose $\theta$, shape $\beta$, and camera parameters $\{s,R,T \}$ that describe the human subject and its projection on the image.
 
 In the next red stage, the shape and pose parameters: $\theta$ and $\beta$ are passed into the SMPL (a human statistical model) to reconstruct the full 3D mesh of the human subject. This 3D mesh also gives us the 3D joint locations.
 
-In the pink stage, the predicted 3D joint locations are projected to the image using camera parameters. The reprojected 2D keypoints will be used to compare against the ground truth 2D keypoints to optimize the generator.
+The pink stage means that the predicted 3D joint locations are projected to the image using camera parameters. The reprojected 2D keypoints will be used to compare against the ground truth 2D keypoints to optimize the generator.
 
-Finally, in the blue stage, a discriminator is trained to encourage the generator to spit out reasonable values that explain for a real human shape and pose; otherwise, as stated in the paper, the generator will produce many visually displeasing result. To achieve it, the generator's weights will be trained, through the discriminator, to fool the discriminator to believe that the $\Theta$ vectors from the generator are from the dataset. At the same time, the discriminator is also fed with both fake values from generator and ground truth values from the dataset to better recognize which one comes from the dataset and which one does not. Over time, the discriminator will become more precise, which also pushes the generator to be more delicate to be able to fool the discriminator.
+Finally, in the blue stage, a discriminator is trained to encourage the generator to spit out reasonable values that represents a real human subject; otherwise, as stated in the paper, the generator will produce many visually displeasing result. To achieve it, the generator's weights will be trained, through the discriminator, to fool the discriminator to believe that the $\Theta$ vectors from the generator are from the dataset. At the same time, the discriminator is also fed with both fake values from generator and ground truth values from the dataset to better recognize which one comes from the dataset and which one does not. Over time, the discriminator will become more precise, which also pushes the generator to be more delicate to be able to fool the discriminator.
 
 
 <br/>
@@ -142,7 +141,7 @@ def batch_kp_2d_l1_loss(self, real_2d_kp, predict_2d_kp):
 ```
 ## 3D Keypoint Loss
 The 3D keypoint loss is calculated as L2 distance between the predicted 3D keypoints and the ground truth keypoints. To avoid the difference in global translation, the two keypoint set are first transformed to its local space by subtracting every keypoints from the average point of the left and right pelvis, as done by the function __align_by_pelvis__. Then the loss is defined as the mean of squared distances of K keypoint pairs.
-</br>
+
 Note that the 3D keypoint loss is just calculated for data records where the 3D ground truth keypoints are available.
 
 The loss is described by the equation $(6)$ in the paper, as rewritten as below
