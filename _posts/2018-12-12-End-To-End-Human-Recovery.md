@@ -31,6 +31,8 @@ The implementation was written by MandyMo. You can check it out [here](https://g
 - [Pose Prior dataset](http://poseprior.is.tue.mpg.de/): images, 2D keypoints, 3D keypoints
 - [CMU pose dataset](http://mocap.cs.cmu.edu/): images, 2D keypoints, 3D keypoints
 
+<br/>
+<br/>
 # Overview
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/overview.png" width="700px" />
@@ -50,6 +52,9 @@ In the pink stage, the predicted 3D joint locations are projected to the image u
 
 Finally, in the blue stage, a discriminator is trained to encourage the generator to spit out reasonable values that explain for a real human shape and pose; otherwise, as stated in the paper, the generator will produce many visually displeasing result. To achieve it, the generator's weights will be trained, through the discriminator, to fool the discriminator to believe that the $\Theta$ vectors from the generator are from the dataset. At the same time, the discriminator is also fed with both fake values from generator and ground truth values from the dataset to better recognize which one comes from the dataset and which one does not. Over time, the discriminator will become more precise, which also pushes the generator to be more delicate to be able to fool the discriminator.
 
+
+<br/>
+<br/>
 # Generator
 <div style="align: left; text-align:center;">
     <img src="/assets/images/e2ehm/generator.png" width="700px" />
