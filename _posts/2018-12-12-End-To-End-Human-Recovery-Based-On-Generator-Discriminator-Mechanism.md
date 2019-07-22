@@ -1,5 +1,5 @@
 ---
-title: "End To End Human Recovery"
+title: "End To End Human Recovery Based On Generator-Discriminator Machanism"
 categories:
   - posts
 tags:
