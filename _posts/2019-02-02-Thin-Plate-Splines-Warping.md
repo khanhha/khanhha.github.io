@@ -286,15 +286,16 @@ The matrix L is built from the input control point set in the input image. It co
 - __P__: the input control points: $(1, x_i, y_i)$
 - __O__: zero block representing constraints on $w_i$ and $x_i$, $y_i$.
 
-$$
-L =
+$$L =
 \begin{bmatrix}K &   P \\ P^T & O \\ \end{bmatrix}
 \times
 \begin{bmatrix}w\\a\end{bmatrix}
 =\begin{bmatrix}v\\o\end{bmatrix}
 $$
 
-```C++
+<br/>
+
+```c++
 // Building the matrices for solving the L*(w|a)=(v|0) problem with L={[K|P];[P'|0]}
 // Building K and P (Needed to build L)
 Mat matK((int)matches.size(),(int)matches.size(),CV_32F);
