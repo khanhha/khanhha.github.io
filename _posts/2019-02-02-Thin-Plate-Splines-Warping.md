@@ -104,12 +104,15 @@ However, what we want is a smooth interpolation function that goes through contr
 <br/>
 
 In general, instead of interpolating from just two closest points as in our above linear interpolation example, with radial basis function, each point will be calculated a weighted combination of all kernel distances, as summarized by the following function. Given an input point $x$, this smooth interpolation function will return the corresponding warped point $x' = f(x)$
+
 $$
 f(x) = \sum{\alpha_iR(x, x_i)}
 $$
+
 where $\alpha_i$ is the weight corresponding to the radial basis function $R(x,x_i)$ around the point $x_i$
 
 $\alpha_i$ is found as the solution to a linear system formed by setting $f(x)$ to $f(x_i)$ for all control points $x_i$. For example, if we have 3 control point correspondences $(x_0, x'_0)$, $(x_1, x'_1)$,  $(x_2, x'_2)$, the corresponding weights $\alpha_0$, $\alpha_1$, $\alpha_2$ will be the solution to the following linear system
+
 $$
 \left[ \begin{array}{c}
 x'_0 \\
@@ -127,7 +130,11 @@ R(x_2, x_0) & R(x_2, x_1) & R(x_0, x_2)
 \alpha_2
 \end{array} \right]
 $$
+<br/>
+
+
 The solution to the system will be
+
 $$
 \vec{\alpha} = R^{-1}\times \vec{x}
 $$
@@ -144,9 +151,10 @@ In the below figures, we refine a bit further the definition of the thin plate s
 
 The two smooth functions are shown below, as modified from the original equations in [the paper](https://pdfs.semanticscholar.org/d926ea562d1de8143b0fe119b9a772cdef8cc50e.pdf)
 
+
 $$
 f_{x'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
-\newline
+\\
 f_{y'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
 $$
 
@@ -164,12 +172,27 @@ The three first coefficients $(a_1, a_x, a_y)$ represents the linear plane that 
 
 The later terms $w_i$ for $i \in [0,N)$ denotes the weight of its kernel surrounding each control point  to the final $x$ or $y$ displacement.
 
-The terms $U(||(x_i, y_i) - (x,y))||)$ represents the distance from a control point $(x_j,y_j)$ to kernel of the control point $(x_i, y_i)$. The visualization of this thin plate spline kernel $U(r) = r^2log(r)$ is shown in below. The closer a point to the kernel center (a control point), the higher its height or the return value is.
 
-![](/assets/images/tps/2019-8076195d.png)
+The terms
+
+$$
+U(||((x_i, y_i) - (x,y))||)
+$$
+
+represents the distance from a control point $(x_j,y_j)$ to the kernel of the control point $(x_i, y_i)$. The visualization of this thin plate spline kernel $U(r) = r^2log(r)$ is shown in below. The closer a point to the kernel center (a control point), the higher its height or the return value is.
+
+<div style="align: left; text-align:center;">
+    <img src="/assets/images/tps/2019-8076195d.png" width="700px" />
+</div>
+<br/>
 
 The below visualization of a complex surface could be used to imagine how all the kernels look like when they are multiplied by their corresponding weights $w_i$
-![](/assets/images/tps/2019-18b0ca24.png)
+
+<div style="align: left; text-align:center;">
+    <img src="/assets/images/tps/2019-18b0ca24.png" width="700px" />
+</div>
+<br/>
+
 
 ## How to solve
 Coefficients $(a, a_x, a_y, w_i)$ of each thin plate spline function are found by solving the following linear system
@@ -182,19 +205,21 @@ L =
 =\begin{bmatrix}v\\o\end{bmatrix}
 $$
 
-where $K_{ij} = U(||(x_i,x_x) - (x_j, y_j)||)$, the ith of P is $(1, x_i, y_i)$.
+where $ K_{ij} = U(distance((x_i,y_i), (x_j, y_j)) $ , the ith of P is $(1, x_i, y_i)$.
 
 The top row of the left side $[K \ \  P]$ $\times$ $[v, o]^T$ represents the function $f_{x'}$ or $f_{y'}$ with all control points $(x_i, y_i)$ substituted.
+
 $$
 f_{x'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
-\newline
+\\
 f_{y'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
 $$
 
 The second row $[P^T\ \  O]$ represents additional constraints to the system, as explained in the section C in [the paper](http://user.engineering.uiowa.edu/~aip/papers/bookstein-89.pdf).
+
 $$
 \sum_{i=1}^N{w_i} = 0 \ \ \ \ \ \ (1)
-\newline
+\\
 \sum_{i=1}^N{w_ix_i} = \sum_{i=1}^N{w_iy_i} = 0 \ \ \ \ \ \ (2)
 $$
 
@@ -241,6 +266,7 @@ In this part, I will explain how the theoretical stages we discussed so far are 
 
 ### The Thin Plate Spline Kernel function
 Below is the kernel function that calculates the distance from a point $p$ to a kernel represented by the point $q$. The input $r$ to the equation is the squared distance to the kernel center.
+
 $$U(r) = r^2log(r)$$
 
 ```c++
@@ -312,6 +338,7 @@ matPt.copyTo(matLroi);
 
 ### Build the right hand side $[v\ o]^T$
 the right hand side is built from target control points $x'_i$ and $y'_i$
+
 $$
 L =
 \begin{bmatrix}K &   P \\ P^T & O \\ \end{bmatrix}
@@ -348,7 +375,8 @@ tpsComputed=true;
 In this part, the main stages to warp a real input image from the estimated Thin-Plate function in the previous section will be described in detail.
 
 ### Build remap data structure
-First a remap data structure will be constructed by sampling from the estimated continuous functions $f_{x'_i}$ and $f_{y'_i}$. This data structure stores warped/deformed locations in the warped image for each location in the input image. An OpenCV function called $remap$ will use this data to interpolate colors for every pixel in the warped image.
+
+First a remap data structure will be constructed by sampling from the estimated continuous functions $f_{x_i'}$, and $f_{y_i'}$. This data structure stores warped/deformed locations in the warped image for each location in the input image. An OpenCV function called **remap** will use this data to interpolate colors for every pixel in the warped image.
 
 ```c++
 /* public methods */
@@ -380,7 +408,7 @@ void ThinPlateSplineShapeTransformerImpl::warpImage(InputArray transformingImage
 
 ### Sample $f_{x'}$ and $f_{y'}$ given a point $(x,y)$
 
-Below is the implementation of the function $\_applyTransformation$ that is called from the above code snippet.
+Below is the implementation of the function **_applyTransformation** that is called from the above code snippet.
 
 ```c++
 static Point2f _applyTransformation(const Mat &shapeRef, const Point2f point, const Mat &tpsParameters)
