@@ -1,5 +1,5 @@
 ---
-title: "Image-Based Virtual Try On Network"
+title: "Image-Based Virtual Try On Network - Part 1"
 categories:
   - posts
 tags:
@@ -14,9 +14,9 @@ tags:
 
 - [Overview](#overview)
 - [Geometric Matching Module](#geometric-matching-module)
-  - [Person representation $p$](#person-representation-p)
+  - [Calculate person representation: $p$](#calculate-person-representation-p)
   - [Find feature correlation](#find-feature-correlation)
-  - [Thin-Plate-Spline grid prediction](#thin-plate-spline-grid-prediction)
+  - [Predict Thin-Plate-Spline transformation](#predict-thin-plate-spline-transformation)
 - [How is the Thin Plate Spline (TPS) transformation generated?](#how-is-the-thin-plate-spline-tps-transformation-generated)
   - [General idea](#general-idea)
   - [Implementation](#implementation)
@@ -54,7 +54,7 @@ The second stage trains another module called Try-On to put the warped clothes o
 
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-06ce51ff.png" width="600px" />
+    <img src="/assets/images/vton/2019-06ce51ff.png" width="1000px" />
     <div class="caption">images are taken from the paper</div>
 </div>
 <br/>
@@ -71,7 +71,7 @@ Due the length of the pipeline, I will first focus on explaining the first stage
 
 From two input data: standard in-shop clothes image $c$ and a person representation $p$ , the module GMM learns to warp the clothes image so that it aligns with the target pose in the person image.
 
-## Person representation $p$
+## Calculate person representation: $p$
 
 The person image is not passed to the model directly because in the test time this image is not available. Therefore, the input person is image is transformed to another person representation to get rid of information about old clothes, color, texture and shape and still preserves face, hair and general body shape of the target. As described in the section 3.1 in the paper, the human representation consists of
 - A pose heat map is a 18-channel image where each slice encodes the heat map of a skeleton joint.
@@ -137,7 +137,7 @@ class FeatureCorrelation(nn.Module):
         return correlation_tensor
 ```
 
-## Thin-Plate-Spline grid prediction
+## Predict Thin-Plate-Spline transformation
 
 The correlation map is then passed to a regressor (the blue trapeze block) that predicts the warped control points for the Thin-Plate-Spline stage, as depicted by the blue points in the below figure. These blue control points will be then used to solve for a smooth Thin-Plate-Spline transformation that warps the input in-shop clothes images to align with the target clothes images on the human subject. In other words, the Thin-Plate-Spline transformation is learned by minimizing the MSE loss between the warped clothes and the corresponding target clothes.
 
@@ -164,6 +164,9 @@ correlation = self.correlation(featureA, featureB)
 theta = self.regression(correlation)
 grid = self.gridGen(theta)
 ````
+<br/>
+<br/>
+<br/>
 
 # How is the Thin Plate Spline (TPS) transformation generated?
 
@@ -182,9 +185,10 @@ __The first control point set__, as shown in the left picture, is constructed in
 <br/>
 
 Actually, the two set of control points will serve as the input and the target set to estimate parameters $a_1, a_x, a_y, w_i$ of the thin plate transformations. For further explanation about these two equations, please check [my previous article](https://khanhha.github.io/posts/Thin-Plate-Splines-Warping/) about TPS.
+
 $$
 f_{x'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
-\newline
+\\
 f_{y'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
 $$
 
@@ -257,7 +261,7 @@ The right hand side of the system $Y' = [y_0'\ y_1'\ y_2'\ 0\ 0\ 0]^T$, or  $X' 
 
 $$
 W_x = L^{-1}\times X'
-\newline
+\\
 W_y = L^{-1}\times Y'
 $$
 
@@ -310,7 +314,7 @@ The coefficient vector $W_x, W_y$ are estimated from two sparse control point se
 
 $$
 f_{x'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
-\newline
+\\
 f_{y'}(x,y) = a_1 + a_xx +a_yy + \sum_{i=1}^N{w_i U(||(x_i, y_i) - (x,y)||)}
 $$
 
