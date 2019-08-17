@@ -49,7 +49,7 @@ When the clothes regions are completely visible, a good mapping could be found b
 
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-7fc9b559.png" width="700px" />
+    <img src="/assets/images/vton/2019-7fc9b559.png" width="500px" />
     <div class="caption">bad warping result due to occlusion</div>
 </div>
 <br/>
@@ -57,13 +57,13 @@ When the clothes regions are completely visible, a good mapping could be found b
 In addition to occlusions caused by hair and arms as above, too different view and tuck also cause clothes to be invisible.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-2ef8f008.png" width="700px" />
+    <img src="/assets/images/vton/2019-2ef8f008.png" width="500px" />
     <div class="caption">bad warping result due to occlusion</div>
 </div>
 <br/>
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-0d2b2f17.png" width="700px" />
+    <img src="/assets/images/vton/2019-0d2b2f17.png" width="500px" />
     <div class="caption">bad warping result due to occlusion</div>
 </div>
 <br/>
@@ -83,7 +83,7 @@ One idea to solve this problem is training an  in-painting clothes model to fill
 Self-intersection occurs with long-sleeve shirts, when the human subject put their arms in front of their belly. In this case, the Thin Plate Spline deformation fails to handle the sleeve correctly. My below experiment demonstrate this problem. First a set of correspondences are specified about the torso contour of the clothes. In this case, no self-intersection among the control point occurs; therefore, the TPS is able to warp the torso region of the in-shop clothes to align with the corresponding torso region of the clothes target.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-fc563f97.png" width="700px" />
+    <img src="/assets/images/vton/2019-fc563f97.png" width="500px" />
     <div class="caption">image is modified from the lecture note by Frédo Durand</div>
 </div>
 <br/>
@@ -91,14 +91,14 @@ Self-intersection occurs with long-sleeve shirts, when the human subject put the
 The warping result with the above point correspondences is shown in below.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-ebfe54c6.png" width="700px" />
+    <img src="/assets/images/vton/2019-ebfe54c6.png" width="500px" />
     <div class="caption"></div>
 </div>
 <br/>
 
 However, when more control points along the sleeve are specified, the TPS starts to show its inability to handle self-intersection.
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-233f9bc1.png" width="700px" />
+    <img src="/assets/images/vton/2019-233f9bc1.png" width="500px" />
     <div class="caption"></div>
 </div>
 <br/>
@@ -107,7 +107,7 @@ And below is the warping result with the added control points.
 
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-3dd0b548.png" width="700px" />
+    <img src="/assets/images/vton/2019-3dd0b548.png" width="500px" />
     <div class="caption"></div>
 </div>
 <br/>
@@ -116,7 +116,7 @@ And below is the warping result with the added control points.
 To deal with this problem, other image deformations such as bounded biharmonic deformation could be used, as show in the below picture. However, the problem is that the chosen deformation method needs to be able to integrate into the training process. This seems very challenging to me now becaues the biharmonic deformation requires to triangulate the clothes contour, and the triangulation could change from contour to contour.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-7287ca6b.png" width="700px" />
+    <img src="/assets/images/vton/2019-7287ca6b.png" width="500px" />
     <div class="caption"></div>
 </div>
 <br/>
