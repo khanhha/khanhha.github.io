@@ -10,17 +10,17 @@ tags:
 ---
 
 
-In this note, I summarized two problems about the Geometric Matching Module in [the paper](https://arxiv.org/pdf/1807.07688.pdf): "Toward Characteristic-Preserving Image-based Virtual Try-On Network". For a background knowledge about this paper, you might want to check my articles [1](https://khanhha.github.io/posts/Image-based-Virtual-Try-On-Network-Part-1/) and [2]() about it.
+In this note, I describe two problems about the Geometric Matching Module in [the paper](https://arxiv.org/pdf/1807.07688.pdf): "Toward Characteristic-Preserving Image-based Virtual Try-On Network" that I found out during my research. The note requires the background knowledge about the virtual try on method, which are described in detail in the the paper or my previous articles [1](https://khanhha.github.io/posts/Image-based-Virtual-Try-On-Network-Part-1/) and [2]().
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
 - [Incorrect target clothes mask.](#incorrect-target-clothes-mask)
   - [Description](#description)
-  - [Solution idea](#solution-idea)
+  - [Idea](#idea)
 - [TPS fails to handle self-intersection.](#tps-fails-to-handle-self-intersection)
   - [Description.](#description-1)
-  - [Idea](#idea)
+  - [Idea](#idea-1)
 - [Conclusion](#conclusion)
 
 <!-- /code_chunk_output -->
@@ -68,7 +68,7 @@ In addition to occlusions caused by hair and arms as above, too different view a
 </div>
 <br/>
 
-## Solution idea
+## Idea
 One idea to solve this problem is training an  in-painting clothes model to fill in occluded regions by air and arm. The in-painted clothes will be then used as the training target for the Geometric Matching Module. Basically, the result from the in-paining module will be similar my below manual modification.
 
 <div style="align: left; text-align:center;">
