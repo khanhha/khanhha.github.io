@@ -32,7 +32,7 @@ In this note, I describe two problems about the Geometric Matching Module in [th
 As stated in the paper, the training data for the Geometric Matching Module consists of a person representation $p$, an in-shop clothes image, and the corresponding clothes region on the human subject, as depicted in below.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-097741a9.png" width="600px" />
+    <img src="/assets/images/vton/2019-097741a9.png" width="500px" />
     <div class="caption">images are taken from the paper</div>
 </div>
 <br/>
@@ -40,7 +40,7 @@ As stated in the paper, the training data for the Geometric Matching Module cons
 The clothes regions on the human subject are marked by the green contour as in the below figure. From the implementation by the author, these green contours define the clothes regions to which the in-shop clothes on the left is warped.
 
 <div style="align: left; text-align:center;">
-    <img src="/assets/images/vton/2019-39edeab0.png" width="700px" />
+    <img src="/assets/images/vton/2019-39edeab0.png" width="500px" />
     <div class="caption">occluded regions by arms</div>
 </div>
 <br/>
