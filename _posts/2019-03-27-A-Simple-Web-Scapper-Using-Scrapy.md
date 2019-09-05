@@ -35,6 +35,7 @@ To extract information from this HTML file, we need to write a Spider class as s
 The main tasks now will be how to extract the information we need from this response, which is done by the function __parse__ using CSS selector, the topic of the next paragraph.
 
 ```python
+
 #this code is taken from https://docs.scrapy.org
 
 import scrapy
@@ -53,6 +54,7 @@ class QuotesSpider(scrapy.Spider):
                 'tags': quote.css('div.tags a.tag::text').getall(),
             }
 ```
+
 
 # CSS selector
 Inside the function __parse__, a ```quote``` division is first located by the following query, which will return the whole HTML block under the element ```div``` with class ```quote```
@@ -74,15 +76,15 @@ The same goes for the field ```author``` and ```tags``` information.
 Now you get a general idea about how data is downloaded and how information is extracted based on CSS selector. In addition to CSS selector, there is another query mechanism called XPath, both of which are supported by Scrapy to locate almost any HTML elements on a web page.
 
 
-## XPath query
+# XPath query
 XPath is based on path expressions to navigate through elements and attributes in an XML file. For example, the XPath query to locate the last book element of the below HTML block is shown in below.
 
-```HTML
+```html
 #xpath query for the last book element
 /bookstore/book[last()]
 ```
 
-```HTML
+```html
 <bookstore>
 
 <book category="cooking">
@@ -118,6 +120,7 @@ with open(path, 'r') as file:
     print(book)
 ```
 The query result is pasted in below.
+
 ```html
 <book category="cooking">
   <title lang="en">Everyday Italian</title>
@@ -131,7 +134,7 @@ The query result is pasted in below.
 
 CSS selector, in contrast use patterns to search for styled elements. While XPath query requires a path to the element we want to reach, which could become cumbersome in some cases, CSS is more flexible in a way that elements can be defined in terms of their class or attributes. Therefore, complex query could be more simplified by combining CSS selectors and XPath.
 
-```HTML
+```html
 <html>
  <head>
   <base href='http://example.com/' />
@@ -155,7 +158,8 @@ response.css('img').xpath('@src').get()
 ```
 
 The result will be a list of image relative links as follows.
-```
+
+```html
 ['image1_thumb.jpg',
  'image2_thumb.jpg',
  'image3_thumb.jpg',
