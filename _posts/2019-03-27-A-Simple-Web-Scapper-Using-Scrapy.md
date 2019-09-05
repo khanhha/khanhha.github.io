@@ -35,11 +35,8 @@ To extract information from this HTML file, we need to write a Spider class as s
 The main tasks now will be how to extract the information we need from this response, which is done by the function __parse__ using CSS selector, the topic of the next paragraph.
 
 ```python
-
-#this code is taken from https://docs.scrapy.org
-
+#code is taken from https://docs.scrapy.org
 import scrapy
-
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
     start_urls = [
@@ -85,22 +82,20 @@ XPath is based on path expressions to navigate through elements and attributes i
 ```
 
 ```html
+#data is taken from https://www.w3schools.com
 <bookstore>
-
 <book category="cooking">
   <title lang="en">Everyday Italian</title>
   <author>Giada De Laurentiis</author>
   <year>2005</year>
   <price>40.00</price>
 </book>
-
 <book category="children">
   <title lang="en">Harry Potter</title>
   <author>J K. Rowling</author>
   <year>2005</year>
   <price>29.99</price>
 </book>
-
 </bookstore>
 ```
 
